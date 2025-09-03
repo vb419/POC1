@@ -1,0 +1,30 @@
+	
+	
+	insert into employee (first_name,chair_access,primary_analyst_access,last_name,user_id,empid) values ('John', true, false, 'Doe', 'john_doe', 1);
+	insert into employee (first_name,chair_access,primary_analyst_access,last_name,user_id,empid) values ('Test', true, false, 'ID1', 'test_id1', 2);
+	insert into employee (first_name,chair_access,primary_analyst_access,last_name,user_id,empid) values ('Test', true, false, 'ID2', 'test_id2', 3);
+	insert into employee (first_name,chair_access,primary_analyst_access,last_name,user_id,empid) values ('Test', true, false, 'ID3', 'test_id3', 4);
+	insert into employee (first_name,chair_access,primary_analyst_access,last_name,user_id,empid) values ('Test', true, false, 'ID4', 'test_id4', 5);
+	insert into employee (first_name,chair_access,primary_analyst_access,last_name,user_id,empid) values ('Test', true, false, 'ID5', 'test_id5', 6);
+
+	
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(1, 'SF', 'John', 'Doe', 'North America', 'ABS', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(2, 'SF', 'John', 'Doe', 'North America', 'CMBS', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(3, 'SF', 'John', 'Doe', 'North America', 'RMBS', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(4, 'SF', 'John', 'Doe', 'North America', 'CLO', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(5, 'CGS', 'John', 'Doe', 'North America', 'Infrastructure', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(6, 'CGS', 'John', 'Doe', 'North America', 'Auto', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(7, 'CGS', 'John', 'Doe', 'North America', 'Finance', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(8, 'SF', 'John', 'Doe', 'Latin America', 'CLO', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(9, 'SF', 'John', 'Doe', 'APAC', 'CLO', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(10, 'SF', 'John', 'Doe', 'EMEA', 'CLO', 'john_doe');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(11, 'CGS', 'Test', 'Id1', 'North America', 'Finance', 'test_id1');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(12, 'CGS', 'Test', 'Id2', 'North America', 'Auto', 'test_id2');
+	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(13, 'SF', 'Test', 'Id3', 'North America', 'ABS', 'test_id3');
+
+
+	http://localhost:8080/Employee/userid/john_doe
+	http://localhost:8080/EmployeeRights/userid/john_doe
+	
+	
+	
