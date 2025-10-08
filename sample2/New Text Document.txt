@@ -22,9 +22,10 @@
 	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(12, 'CGS', 'Test', 'Id2', 'North America', 'Auto', 'test_id2');
 	INSERT INTO EMPLOYEE_RIGHTS  (SERIAL_NUMBER, DEPARTMENT, FIRST_NAME, LAST_NAME, REGION, SUB_DEPARTMENT, USER_ID) VALUES(13, 'SF', 'Test', 'Id3', 'North America', 'ABS', 'test_id3');
 
-
+	http://localhost:8080/h2-console/login.jsp?jsessionid=e987aa805fdcdc7d40bb42e649dd4dba
 	http://localhost:8080/Employee/userid/john_doe
 	http://localhost:8080/EmployeeRights/userid/john_doe
 	
 	
+
 	
