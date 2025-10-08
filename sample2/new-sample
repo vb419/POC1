@@ -1,59 +1,78 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 function App() {
+  const gridRef = useRef(null);
   const [username, setUsername] = useState("");
-  const [data, setData] = useState(null);
+  const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const columnDefs = [
+    { headerName: "User ID", field: "serialNumber" },
+    { headerName: "SSO ID", field: "userId" },
+    { headerName: "First Name", field: "firstName" },
+    { headerName: "Last Name", field: "lastName" },
+    { headerName: "Region", field: "region" },
+    { headerName: "Department", field: "department" },
+    { headerName: "Sub Department", field: "subDepartment" },
+  ];
+
+  const defaultColDef = { sortable: true, filter: true, flex: 1 };
+
   const handleSearch = async () => {
-    if (!username.trim()) {
-      alert("Please enter a username");
-      return;
-    }
+    const u = username.trim();
+    if (!u) return alert("Please enter a username");
 
     setLoading(true);
     try {
-      // dynamically append username to API URL
-      const response = await fetch(
-        `http://localhost:8080/EmployeeRights/Byuserid/${encodeURIComponent(username)}`
+      const resp = await fetch(
+        `http://localhost:8080/EmployeeRights/Byuserid/${encodeURIComponent(u)}`
       );
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      setData(json);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      alert("Failed to fetch data. Check console or backend.");
-      setData(null);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      setRowData(Array.isArray(data) ? data : [data]); // normalize shape
+    } catch (e) {
+      console.error(e);
+      alert("Failed to fetch. Check the server/console.");
+      setRowData([]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>User Search</h2>
+    <div style={{ padding: 16 }}>
+      <h2>User Rights</h2>
 
-      {/* Search box and button */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+      {/* Search box + button */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <input
           type="text"
-          placeholder="Enter username..."
+          placeholder="Enter username (e.g., john_doe)"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ padding: 8, flex: 1 }}
+          style={{ padding: 8, minWidth: 260 }}
         />
-        <button onClick={handleSearch} disabled={loading} style={{ padding: "8px 16px" }}>
-          {loading ? "Searching..." : "Search"}
+        <button onClick={handleSearch} disabled={loading} style={{ padding: "8px 14px" }}>
+          {loading ? "Loading..." : "Search"}
         </button>
       </div>
 
-      {/* Display results */}
-      {data && (
-        <div>
-          <h4>API Response:</h4>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      )}
+      {/* Grid */}
+      <div className="ag-theme-quartz" style={{ height: 420 }}>
+        <AgGridReact
+          ref={gridRef}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          rowData={rowData}
+          animateRows
+        />
+      </div>
     </div>
   );
 }
