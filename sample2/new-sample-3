@@ -1,0 +1,173 @@
+import React, { useState, useRef } from "react";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import "./App.css";
+
+import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+function App() {
+  const gridRightsRef = useRef(null);
+  const gridAccessRef = useRef(null);
+
+  const [activeTab, setActiveTab] = useState("rights"); // 'rights' | 'access'
+  const [rowDataRights, setRowDataRights] = useState([]);
+  const [rowDataAccess, setRowDataAccess] = useState([]);
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [quickFilter, setQuickFilter] = useState("");
+
+  const columnDefs = [
+    { headerName: "User ID", field: "serialNumber" },
+    { headerName: "SSO ID", field: "userId" },
+    { headerName: "First Name", field: "firstName" },
+    { headerName: "Last Name", field: "lastName" },
+    { headerName: "Region", field: "region" },
+    { headerName: "Department", field: "department" },
+    { headerName: "Sub Department", field: "subDepartment" },
+  ];
+  const defaultColDef = { sortable: true, flex: 1, filter: true };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const u = username.trim();
+    if (!u) return;
+
+    setLoading(true);
+    try {
+      const resp = await fetch(
+        `http://localhost:8080/EmployeeRights/Byuserid/${encodeURIComponent(u)}`
+      );
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      const rows = Array.isArray(data) ? data : [data];
+
+      if (activeTab === "rights") {
+        setRowDataRights(rows);
+        gridRightsRef.current?.api?.setQuickFilter("");
+      } else {
+        setRowDataAccess(rows);
+        gridAccessRef.current?.api?.setQuickFilter("");
+      }
+      setQuickFilter("");
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      if (activeTab === "rights") setRowDataRights([]);
+      else setRowDataAccess([]);
+      alert("Failed to load data. Check console/network and try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="App" style={{ padding: 12 }}>
+      <h1 style={{ textAlign: "center" }}>Workflow Access Management</h1>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <button
+          onClick={() => setActiveTab("rights")}
+          className={activeTab === "rights" ? "tab active" : "tab"}
+        >
+          User Rights
+        </button>
+        <button
+          onClick={() => setActiveTab("access")}
+          className={activeTab === "access" ? "tab active" : "tab"}
+        >
+          User Access
+        </button>
+      </div>
+
+      {/* Shared search form */}
+      <form onSubmit={handleSubmit} style={{ marginBottom: 12, display: "flex", gap: 8 }}>
+        <div style={{ position: "relative" }}>
+          <input
+            type="text"
+            placeholder="Enter username (e.g., john_doe)"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ padding: "6px 26px 6px 6px", minWidth: 260 }}
+          />
+          {username && (
+            <button
+              type="button"
+              onClick={() => {
+                setUsername("");
+                setQuickFilter("");
+                gridRightsRef.current?.api?.setQuickFilter("");
+                gridAccessRef.current?.api?.setQuickFilter("");
+              }}
+              title="Clear"
+              style={{
+                position: "absolute",
+                right: 6,
+                top: "50%",
+                transform: "translateY(-50%)",
+                border: "none",
+                background: "transparent",
+                fontSize: 16,
+                cursor: "pointer",
+                color: "#888",
+              }}
+            >
+              ×
+            </button>
+          )}
+        </div>
+        <button type="submit" disabled={loading} style={{ padding: "6px 12px" }}>
+          {loading ? "Loading..." : "Submit"}
+        </button>
+      </form>
+
+      {/* Optional quick filter (applies to the active grid) */}
+      <div style={{ marginBottom: 8 }}>
+        <input
+          type="text"
+          placeholder="Quick filter grid…"
+          value={quickFilter}
+          onChange={(e) => {
+            const val = e.target.value;
+            setQuickFilter(val);
+            if (activeTab === "rights") gridRightsRef.current?.api?.setQuickFilter(val);
+            else gridAccessRef.current?.api?.setQuickFilter(val);
+          }}
+          style={{ padding: 6, minWidth: 260 }}
+        />
+      </div>
+
+      {/* Panels */}
+      {activeTab === "rights" ? (
+        <>
+          <h3>User Rights</h3>
+          <div className="ag-theme-quartz" style={{ height: 400 }}>
+            <AgGridReact
+              ref={gridRightsRef}
+              columnDefs={columnDefs}
+              rowData={rowDataRights}
+              defaultColDef={defaultColDef}
+              animateRows
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <h3>User Access</h3>
+          <div className="ag-theme-quartz" style={{ height: 400 }}>
+            <AgGridReact
+              ref={gridAccessRef}
+              columnDefs={columnDefs}
+              rowData={rowDataAccess}
+              defaultColDef={defaultColDef}
+              animateRows
+            />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default App;
